@@ -1,8 +1,5 @@
 package com.bobocode.intro;
 
-import com.bobocode.util.ExerciseNotCompletedException;
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.Base64;
 
 /**
