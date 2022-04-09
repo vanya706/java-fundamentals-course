@@ -6,7 +6,6 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.StreamSupport;
 
 /**
  * {@link CrazyGenerics} is an exercise class. It consists of classes, interfaces and methods that should be updated
@@ -208,8 +207,20 @@ public class CrazyGenerics {
          * @return optional max value
          */
         public static <T> Optional<T> findMax(Iterable<T> elements, Comparator<? super T> comparator) {
-          return StreamSupport.stream(elements.spliterator(), false)
-              .max(comparator);
+            Iterator<T> iterator = elements.iterator();
+            if (!iterator.hasNext()) {
+                return Optional.empty();
+            }
+
+            T max = iterator.next();
+
+            while (iterator.hasNext()) {
+                T next = iterator.next();
+                if (comparator.compare(next, max) > 0) {
+                    max = next;
+                }
+            }
+            return Optional.of(max);
         }
 
         /**
