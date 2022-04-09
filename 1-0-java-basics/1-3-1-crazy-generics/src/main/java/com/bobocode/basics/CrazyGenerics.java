@@ -136,7 +136,7 @@ public class CrazyGenerics {
 
         @Override
       default int compareTo(Collection<?> collection) {
-        return size() - collection.size();
+        return Integer.compare(size(), collection.size());
       }
 
     }
