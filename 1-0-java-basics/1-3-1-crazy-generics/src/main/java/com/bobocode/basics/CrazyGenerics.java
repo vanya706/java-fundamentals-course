@@ -134,6 +134,7 @@ public class CrazyGenerics {
      */
     interface ComparableCollection<E> extends Comparable<Collection<?>>, Collection<E> {
 
+        @Override
       default int compareTo(Collection<?> collection) {
         return size() - collection.size();
       }
@@ -176,7 +177,7 @@ public class CrazyGenerics {
          * @param validationPredicate criteria for validation
          * @return true if all entities fit validation criteria
          */
-        public static <T extends BaseEntity> boolean isValidCollection(Collection<T> entities, Predicate<T> validationPredicate) {
+        public static boolean isValidCollection(Collection<? extends BaseEntity> entities, Predicate<? super BaseEntity> validationPredicate) {
             return entities.stream().allMatch(validationPredicate);
         }
 
@@ -206,7 +207,7 @@ public class CrazyGenerics {
          * @param <T>        type of elements
          * @return optional max value
          */
-        public static <T> Optional<T> findMax(Iterable<T> elements, Comparator<T> comparator) {
+        public static <T> Optional<T> findMax(Iterable<T> elements, Comparator<? super T> comparator) {
           return StreamSupport.stream(elements.spliterator(), false)
               .max(comparator);
         }
@@ -237,9 +238,13 @@ public class CrazyGenerics {
          * @param i        index of the element to swap
          * @param j        index of the other element to swap
          */
-        public static <T> void swap(List<T> elements, int i, int j) {
+        public static void swap(List<?> elements, int i, int j) {
             Objects.checkIndex(i, elements.size());
             Objects.checkIndex(j, elements.size());
+            swapHelper(elements, i, j);
+        }
+
+        private static <T> void swapHelper(List<T> elements, int i, int j) {
             T temp = elements.get(i);
             elements.set(i, elements.get(j));
             elements.set(j, temp);
